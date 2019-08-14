@@ -1,20 +1,22 @@
 
 {
-  "name": "react-native-net-info",
+  "name": "react-native-vk-netinfo",
   "version": "1.0.0",
-  "description": "",
+  "description": "A net info for react-native, about vpn host ip",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "react-native"
+    "react-native",
+    "vpn",
+    "host",
+    "ip",
+    "netinfo"
   ],
   "author": "",
   "license": "",
   "peerDependencies": {
-    "react-native": "^0.41.2",
-    "react-native-windows": "0.41.0-rc.1"
-
+    "react-native": "^0.58.6"
   }
 }

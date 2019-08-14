@@ -17,9 +17,9 @@ RCT_EXPORT_MODULE()
 
 /** 检测是否连接VPN*/
 RCT_EXPORT_METHOD(isVPNConnected:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-    
+
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
+
         NSDictionary *dict = CFBridgingRelease(CFNetworkCopySystemProxySettings());
         NSArray *keys = [dict[@"__SCOPED__"]allKeys];
         BOOL isVpn = NO;
@@ -36,9 +36,9 @@ RCT_EXPORT_METHOD(isVPNConnected:(RCTPromiseResolveBlock)resolve rejecter:(RCTPr
 
 /**获取运营商*/
 RCT_EXPORT_METHOD(getCarrierName:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-    
+
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
+
         //获取运营商名称
         CTCarrier *carrier = [[CTTelephonyNetworkInfo new] subscriberCellularProvider];
         NSString *carrierName = [carrier carrierName];
@@ -50,20 +50,21 @@ RCT_EXPORT_METHOD(getCarrierName:(RCTPromiseResolveBlock)resolve rejecter:(RCTPr
 RCT_EXPORT_METHOD(getIpsFromHost:(NSString *)host
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject) {
-    
+
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
+
         NSError * error;
         NSArray * addresses = [self performDnsLookup:host error:&error];
-        
-        if (!addresses) {
-            
-            NSString * errorCode = [NSString stringWithFormat:@"%ld", (long) error.code];
-            reject(errorCode, error.userInfo[NSDebugDescriptionErrorKey], error);
-        } else {
-            
-            resolve(addresses);
-        }
+        resolve(addresses);
+
+        //if (!addresses) {
+
+            //NSString * errorCode = [NSString stringWithFormat:@"%ld", (long) error.code];
+            //resolve(errorCode, error.userInfo[NSDebugDescriptionErrorKey], error);
+        //} else {
+
+            //resolve(addresses);
+        //}
     });
 }
 
@@ -74,27 +75,27 @@ RCT_EXPORT_METHOD(getIpsFromHost:(NSString *)host
         *error = [NSError errorWithDomain:NSGenericException code: kCFHostErrorUnknown userInfo: @{ NSDebugDescriptionErrorKey:@"Hostname cannot be null." }];
         return nil;
     }
-    
+
     CFHostRef hostRef = CFHostCreateWithName(kCFAllocatorDefault, (__bridge CFStringRef) hostname);
     if (hostRef == nil) {
         *error = [NSError errorWithDomain:NSGenericException code: kCFHostErrorUnknown userInfo: @{NSDebugDescriptionErrorKey:@"Failed to create host."}];
         return nil;
     }
-    
+
     BOOL didStart = CFHostStartInfoResolution(hostRef, kCFHostAddresses, nil);
     if (!didStart) {
         *error = [NSError errorWithDomain:NSGenericException code: kCFHostErrorUnknown userInfo: @{NSDebugDescriptionErrorKey:@"Failed to start."}];
         CFRelease(hostRef);
         return nil;
     }
-    
+
     CFArrayRef addressesRef = CFHostGetAddressing(hostRef, nil);
     if (addressesRef == nil) {
         *error = [NSError errorWithDomain:NSGenericException code: kCFHostErrorUnknown userInfo: @{NSDebugDescriptionErrorKey:@"Failed to get addresses."}];
         CFRelease(hostRef);
         return nil;
     }
-    
+
     // Convert these addresses into strings.
     NSMutableArray * addresses = [NSMutableArray array];
     char ipAddress[INET6_ADDRSTRLEN];
@@ -109,4 +110,4 @@ RCT_EXPORT_METHOD(getIpsFromHost:(NSString *)host
 }
 
 @end
-  
+
