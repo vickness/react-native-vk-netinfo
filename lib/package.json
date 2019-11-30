@@ -1,7 +1,7 @@
 
 {
   "name": "react-native-vk-netinfo",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A net info for react-native, about vpn host ip",
   "main": "index.js",
   "scripts": {
@@ -14,9 +14,10 @@
     "ip",
     "netinfo"
   ],
-  "author": "",
-  "license": "",
+  "author": "409284801@qq.com",
+  "license": "MIT",
   "peerDependencies": {
     "react-native": "^0.58.6"
-  }
+  },
+  "homepage": "https://github.com/vickness/react-native-vk-netinfo#readme"
 }
